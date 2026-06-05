@@ -1,0 +1,6 @@
+[submodule "ExternalModules/FileSystemUtils"]
+	path = ExternalModules/FileSystemUtils
+	url = https://github.com/Grimm2130/Cpp-FileSystemUtils.git
+[submodule "ExternalModules/Templates"]
+	path = ExternalModules/Templates
+	url = https://github.com/Grimm2130/Templates.git
