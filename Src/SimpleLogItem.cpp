@@ -22,6 +22,20 @@ namespace Logger
         }
     }
 
+    SimpleLogItem::SimpleLogItem(const char*filePath, const LogLevel level, const char* msg, va_list* args ):
+        mFilePath(filePath),
+        mLevel(level)
+    {
+        if( msg )
+        {
+            int len = vsnprintf( mLog, LogBufferSize, msg, *args);
+        }
+        else
+        {
+            mLog[0] = '\0';
+        }
+    }
+
     SimpleLogItem::~SimpleLogItem()
     {
 

@@ -11,6 +11,7 @@ namespace Logger
     {
     public:
         SimpleLogItem(const char*filePath, const LogLevel level, const char* msg, ... );
+        SimpleLogItem(const char*filePath, const LogLevel level, const char* msg, va_list* args );
         ~SimpleLogItem() override;
         std::string Str() const override;
         const std::string& GetFilePath() const;

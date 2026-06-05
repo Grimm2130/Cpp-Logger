@@ -54,7 +54,7 @@ namespace Logger
 
             static bool TestLog()
             {
-                if( logger->Log(level, filePath, "Hello from Chima - Log") == LoggerOperationResult::Success )
+                if( logger->Log(level, filePath, "Hello from Chima - %s", "Log") == LoggerOperationResult::Success )
                 {
                     return true;
                 }
