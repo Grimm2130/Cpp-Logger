@@ -1,7 +1,7 @@
 #if !defined(__LOG_LEVEL_H__)
 #define __LOG_LEVEL_H__
 
-#include "ExternalModules/Templates/CppTemplates/Templates.h"
+#include "CppTemplates/Templates.h"
 #include <string>
 
 namespace Logger

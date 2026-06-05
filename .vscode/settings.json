@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/home/ubuntu/Projects/Logger/ExternalModules/FileSystemUtils"
+    "cmake.sourceDirectory": "/home/ubuntu/Projects/Logger/ExternalModules/FileSystemUtils",
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }

@@ -1,54 +1,94 @@
 #include "SimpleLogger.h"
 #include "SimpleLogItem.h"
-#include "ExternalModules/FileSystemUtils/Inc/File.h"
+#include "File.h"
 
 namespace Logger
 {
+    SimpleLogger::~SimpleLogger()
+    {
+    }
+
     SimpleLogger::SimpleLogger() :
-        mMaxFileSize(sDefaultMaxFileSize)
+        mMaxFileSize(sDefaultMaxFileSize),
+        mLogLevel(sDefaultLevel)
     {
     }
 
-    SimpleLogger::SimpleLogger( const size_t maxFileSize ) :
-        mMaxFileSize(maxFileSize)
+    SimpleLogger::SimpleLogger( const size_t maxFileSize, const LogLevel level ) :
+        mMaxFileSize(maxFileSize),
+        mLogLevel(level)
     {
     }
 
-    LoggerOperationResult SimpleLogger::Log( const SimpleLogItem& item )
+    const LogLevel& SimpleLogger::GetLogLevel() const
     {
-        int len = FileSystemUtils::File::Write( item.GetFilePath().c_str(), item.Str() );
-
-        if( len > 0 )
-        {
-            return LoggerOperationResult::Success;
-        }
-        else
-        {
-            printf("SimpleLogger::Log %s", FileSystemUtils::File::GetErrorStr().c_str() );
-            return LoggerOperationResult::Failure;
-        }
+        return mLogLevel;
     }
 
-    LoggerOperationResult SimpleLogger::Log( const std::string& filePath, const char* msg, ... )
+    void SimpleLogger::SetLogLevel( const LogLevel& level )
     {
-        
-        if( FileSystemUtils::File::Exists( filePath.c_str() ) == false )
-        {
-            FileSystemUtils::File::Create( filePath.c_str(), W_OK | R_OK );
-        }
-     
-        int len = FileSystemUtils::File::Write( filePath.c_str(), msg );
-
-        if( len > 0 )
-        {
-            return LoggerOperationResult::Success;
-        }
-        else
-        {
-            printf("SimpleLogger::Log %s", FileSystemUtils::File::GetErrorStr().c_str() );
-            return LoggerOperationResult::Failure;
-        }
+        mLogLevel = level;
     }
 
+    LoggerOperationResult SimpleLogger::Log( const LogLevel level, const SimpleLogItem& item )
+    {
+        LoggerOperationResult res = LoggerOperationResult::Success;
+
+        if( level <= mLogLevel )
+        {
+            if( FileSystemUtils::File::Exists( item.GetFilePath().c_str() ) == false )
+            {
+                FileSystemUtils::File::Create( item.GetFilePath().c_str(), W_OK | R_OK );
+            }
+
+            int len = FileSystemUtils::File::Append( item.GetFilePath().c_str(), item.Str() );
     
+            if( len > 0 )
+            {
+                res = LoggerOperationResult::Success;
+            }
+            else
+            {
+                printf("SimpleLogger::Log %s", FileSystemUtils::File::GetErrorStr().c_str() );
+                res = LoggerOperationResult::Failure;
+            }
+        }
+        else
+        {
+            res = LoggerOperationResult::Success;
+        }
+
+        return res;
+    }
+
+    LoggerOperationResult SimpleLogger::Log( const LogLevel level, const std::string& filePath, const char* msg, ... )
+    {
+        LoggerOperationResult res = LoggerOperationResult::Success;
+
+        if( level <= mLogLevel )
+        {
+            if( FileSystemUtils::File::Exists( filePath.c_str() ) == false )
+            {
+                FileSystemUtils::File::Create( filePath.c_str(), W_OK | R_OK );
+            }
+         
+            int len = FileSystemUtils::File::Append( filePath.c_str(), msg );
+    
+            if( len > 0 )
+            {
+                res = LoggerOperationResult::Success;
+            }
+            else
+            {
+                printf("SimpleLogger::Log %s", FileSystemUtils::File::GetErrorStr().c_str() );
+                res = LoggerOperationResult::Failure;
+            }
+        }
+        else
+        {
+            res = LoggerOperationResult::Success;
+        }
+
+        return res;
+    }
 } // namespace Logger

@@ -1,0 +1,2 @@
+[0]::[Debug] Hello from Chima
+Hello from Chima - Log
